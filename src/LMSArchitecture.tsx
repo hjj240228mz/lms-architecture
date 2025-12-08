@@ -207,6 +207,20 @@ export default function LMSArchitecture() {
       items: ['부서/팀 계층 구조', '조직별 사용자 관리', '일괄 사용자 등록 (엑셀)', 'SSO 연동 (OKTA, Azure AD)']
     },
     {
+      id: 'b2b-instructor',
+      title: 'External Instructor (외부강사)',
+      icon: GraduationCap,
+      color: 'border-blue-300 bg-blue-50',
+      items: ['외부 강사 풀 관리', '강사 프로필/이력 관리', '차수별 외부강사 배정', '강사비 정산']
+    },
+    {
+      id: 'b2b-offline',
+      title: 'Offline Class (오프라인 강의)',
+      icon: Calendar,
+      color: 'border-blue-300 bg-blue-50',
+      items: ['강의실/장소 관리', '오프라인 일정 등록', '출석 체크 (QR/수기)', '현장 강의 자료 배포']
+    },
+    {
       id: 'b2b-analytics',
       title: 'Analytics (분석)',
       icon: BarChart3,
@@ -489,6 +503,8 @@ export default function LMSArchitecture() {
         <ul className="text-sm text-blue-600 space-y-1">
           <li>• 화이트라벨 (로고, 색상, 도메인 커스터마이징)</li>
           <li>• 조직 구조 관리 + SSO 연동</li>
+          <li>• 외부강사 풀 관리 및 배정</li>
+          <li>• 오프라인 강의 (강의실, 출석체크)</li>
           <li>• B2C 강의 라이선스 연동 가능</li>
           <li>• 기업 계약 결제 (연간 라이선스)</li>
         </ul>
