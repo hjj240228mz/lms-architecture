@@ -84,56 +84,56 @@ export default function LMSArchitecture() {
       title: 'UM (User Master)',
       icon: User,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['사용자 기본 정보 관리', '인증/인가 처리', '역할(Role) 관리', 'B2B: 소속 조직 관리']
+      items: ['[um_users] 사용자 기본 정보', '인증/인가 처리 (email, password)', '역할(Role): USER, MEMBER, OPERATOR, ADMIN', 'B2B: Organization 소속 관리', 'UserStatus: ACTIVE, INACTIVE, SUSPENDED']
     },
     {
       id: 'ts',
       title: 'TS (Time Schedule)',
       icon: Clock,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['강의 개설 신청 접수/검토', '차수(Time) 생성 및 관리', '강사 배정', '필수 수강 강제 신청', '차수 수정/삭제']
+      items: ['[ts_courses] 강의 개설 신청/검토', 'CourseStatus: DRAFT → PENDING → APPROVED', '[ts_course_times] 차수(Time) 생성', 'TimeStatus: SCHEDULED → OPEN → IN_PROGRESS → COMPLETED', '강사 배정 (IIS 연동)', '필수 수강 강제 신청 (SIS 연동)']
     },
     {
       id: 'sis',
       title: 'SIS (Student Information)',
       icon: UserCheck,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['수강신청 시점 기록 (userKey, timeKey, timestamp)', '수강 이력 관리', '학습 진도 추적', '수료 상태 관리']
+      items: ['[sis_enrollments] 수강 기록', '필수: userKey + timeKey + enrolledAt', 'EnrollmentType: VOLUNTARY, MANDATORY', 'EnrollmentStatus: ENROLLED → COMPLETED/DROPPED', 'progressPercent (0-100), score', '수료 시점 기록 (completedAt)']
     },
     {
       id: 'iis',
       title: 'IIS (Instructor Information)',
       icon: GraduationCap,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['강사 배정 시점 기록 (userKey, timeKey, timestamp)', '강의 이력 관리', '강사별 강의 현황', '주강사/보조강사 구분']
+      items: ['[iis_instructor_assignments] 강사 배정', '필수: userKey + timeKey + assignedAt', 'InstructorRole: MAIN, SUB', 'AssignmentStatus: ACTIVE, REPLACED, CANCELLED', '강사 교체 이력 관리 (replacedAt)']
     },
     {
       id: 'cm',
       title: 'CM (Course Matrix)',
       icon: FolderTree,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['강의 메타데이터 관리', '커리큘럼 구성 (섹션 → 학습객체)', '강의 카테고리/태그 관리', '레벨/타입 설정']
+      items: ['[cm_courses] 강의 메타데이터', 'CourseLevel: BEGINNER, INTERMEDIATE, ADVANCED', 'CourseType: ONLINE, OFFLINE, BLENDED', '[cm_course_sections] 섹션 구성', '[cm_section_items] LO 연결 (sortOrder)']
     },
     {
       id: 'cr',
       title: 'CR (Course Relation)',
       icon: Link2,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['강의 간 관계 설정', '선수강 조건 관리', '연관/추천 강의 관리', '번들 강의']
+      items: ['[cr_course_relations] 강의 간 관계', 'RelationType: PREREQUISITE (선수강)', 'RECOMMENDED (추천), RELATED (연관)', 'ADVANCED (심화), BUNDLE (번들)', 'Linked List 패턴 (from → to)']
     },
     {
       id: 'lo',
       title: 'LO (Learning Object)',
       icon: Play,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['학습 객체 메타데이터 관리', '재사용 가능한 학습 단위', 'CMS와 연동하여 컨텐츠 참조', '영상/문서/퀴즈/과제/SCORM']
+      items: ['[lo_learning_objects] 학습 객체', 'Type: VIDEO, DOCUMENT, QUIZ, ASSIGNMENT', 'LIVE_SESSION, EXTERNAL_LINK, SCORM', 'CMS contentId 연결', 'Content 업로드 시 자동 생성 (Event)']
     },
     {
       id: 'cms',
       title: 'CMS (Content Management)',
       icon: Upload,
       color: 'border-indigo-300 bg-indigo-50',
-      items: ['컨텐츠 파일 업로드/저장', '영상 인코딩/트랜스코딩', 'CDN 연동 (S3 + CloudFront)', '파일 버전 관리']
+      items: ['[cms_contents] 컨텐츠 파일', 'ContentType: VIDEO, DOCUMENT, IMAGE, AUDIO', 'S3 업로드 → MediaConvert 인코딩', 'CDN URL (CloudFront)', 'ContentStatus: UPLOADING → PROCESSING → READY']
     },
     {
       id: 'i18n',
@@ -386,6 +386,7 @@ export default function LMSArchitecture() {
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CMS</span>
               <span>→</span>
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">LO</span>
+              <span className="text-gray-400">(자동생성)</span>
             </div>
           </div>
           {/* 2. 강의 구성 & 개설 신청 */}
@@ -399,6 +400,7 @@ export default function LMSArchitecture() {
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CR</span>
               <span>→</span>
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">TS</span>
+              <span className="text-gray-400">(PENDING)</span>
             </div>
           </div>
           {/* 3. 검토/승인 & 운영 */}
@@ -406,7 +408,7 @@ export default function LMSArchitecture() {
             <div className="text-gray-500 mb-1">3. 검토/승인 & 운영 (OPERATOR)</div>
             <div className="flex items-center justify-center gap-2 flex-wrap">
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">TS</span>
-              <span className="text-gray-400">(차수생성)</span>
+              <span className="text-gray-400">(APPROVED + 차수생성)</span>
               <span>→</span>
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">IIS</span>
               <span className="text-gray-400">(강사배정)</span>
@@ -416,12 +418,25 @@ export default function LMSArchitecture() {
           <div className="bg-gray-50 p-2 rounded">
             <div className="text-gray-500 mb-1">4. 수강 신청 & 학습 (USER)</div>
             <div className="flex items-center justify-center gap-2">
-              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">UM</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CR</span>
+              <span className="text-gray-400">(선수강 검증)</span>
               <span>→</span>
               <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">SIS</span>
               <span className="text-gray-400">(수강/진도/수료)</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Operator 권한 */}
+      <div className="bg-indigo-50 rounded-lg p-4 mb-4 border border-indigo-200">
+        <h3 className="font-semibold text-indigo-700 mb-2">Operator 권한</h3>
+        <div className="text-xs text-indigo-600 space-y-1">
+          <div className="flex justify-between"><span>강의 검토/승인</span><span className="text-indigo-400">PENDING → APPROVED</span></div>
+          <div className="flex justify-between"><span>차수 생성/수정/삭제</span><span className="text-indigo-400">CourseTime CRUD</span></div>
+          <div className="flex justify-between"><span>강사 배정/변경</span><span className="text-indigo-400">IIS 기록</span></div>
+          <div className="flex justify-between"><span>필수 수강 강제 신청</span><span className="text-indigo-400">SIS 기록 (MANDATORY)</span></div>
+          <div className="flex justify-between"><span>수강/강사 현황 조회</span><span className="text-indigo-400">SIS/IIS 데이터</span></div>
         </div>
       </div>
 
