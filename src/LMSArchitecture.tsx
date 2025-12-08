@@ -135,6 +135,13 @@ export default function LMSArchitecture() {
       color: 'border-indigo-300 bg-indigo-50',
       items: ['컨텐츠 파일 업로드/저장', '영상 인코딩/트랜스코딩', 'CDN 연동 (S3 + CloudFront)', '파일 버전 관리']
     },
+    {
+      id: 'i18n',
+      title: 'i18n (다국어)',
+      icon: Languages,
+      color: 'border-indigo-300 bg-indigo-50',
+      items: ['다국어 콘텐츠 관리', '언어 설정 (한/영/일/중)', '자동 번역 연동', 'RTL 지원']
+    },
   ];
 
   // B2C 모듈 (코어 - user-roles.md 기반)
@@ -254,13 +261,6 @@ export default function LMSArchitecture() {
       items: ['강사 스케줄 관리', '레슨 예약', '춤/노래 연습실 예약', '알림 시스템'],
       badge: '입시반용'
     },
-    {
-      id: 'kpop-i18n',
-      title: 'i18n (다국어)',
-      icon: Languages,
-      color: 'border-purple-300 bg-purple-50',
-      items: ['다국어 콘텐츠 관리', '언어 설정 (한/영/일/중)', '자동 번역 연동']
-    },
   ];
 
   // 역할 정보 (user-roles.md 기반)
@@ -363,28 +363,50 @@ export default function LMSArchitecture() {
 
       {/* 모듈 관계 다이어그램 */}
       <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200">
-        <h3 className="font-semibold text-gray-700 mb-3">모듈 관계도</h3>
-        <div className="text-xs text-gray-600 space-y-2">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">LO</span>
-            <span>↔</span>
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CMS</span>
+        <h3 className="font-semibold text-gray-700 mb-3">모듈 관계도 (데이터 흐름)</h3>
+        <div className="text-xs text-gray-600 space-y-3">
+          {/* 1. 컨텐츠 생성 */}
+          <div className="bg-gray-50 p-2 rounded">
+            <div className="text-gray-500 mb-1">1. 컨텐츠 생성</div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CMS</span>
+              <span>→</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">LO</span>
+            </div>
           </div>
-          <div className="text-center text-gray-400">↓</div>
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">UM</span>
-            <span>→</span>
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">IIS</span>
-            <span>→</span>
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">TS</span>
-            <span>←</span>
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CM</span>
-            <span>←</span>
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CR</span>
+          {/* 2. 강의 구성 & 개설 신청 */}
+          <div className="bg-gray-50 p-2 rounded">
+            <div className="text-gray-500 mb-1">2. 강의 구성 & 개설 신청 (USER)</div>
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">LO</span>
+              <span>→</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CM</span>
+              <span>↔</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">CR</span>
+              <span>→</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">TS</span>
+            </div>
           </div>
-          <div className="text-center text-gray-400">↓</div>
-          <div className="flex items-center justify-center">
-            <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">SIS</span>
+          {/* 3. 검토/승인 & 운영 */}
+          <div className="bg-gray-50 p-2 rounded">
+            <div className="text-gray-500 mb-1">3. 검토/승인 & 운영 (OPERATOR)</div>
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">TS</span>
+              <span className="text-gray-400">(차수생성)</span>
+              <span>→</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">IIS</span>
+              <span className="text-gray-400">(강사배정)</span>
+            </div>
+          </div>
+          {/* 4. 수강 */}
+          <div className="bg-gray-50 p-2 rounded">
+            <div className="text-gray-500 mb-1">4. 수강 신청 & 학습 (USER)</div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">UM</span>
+              <span>→</span>
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">SIS</span>
+              <span className="text-gray-400">(수강/진도/수료)</span>
+            </div>
           </div>
         </div>
       </div>
